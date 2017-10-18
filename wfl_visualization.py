@@ -94,6 +94,49 @@ for i in range(graphs):
             axes[position[i]].set_title(name_list[i], size = 10);
             axes[position[i]].tick_params(labelsize=5)
 
+wfl_attend = wfl
+wfl_attend[wfl>0] = 1
+wfl_attend = wfl_attend.fillna(0)
+wfl_attend[:5]
+
+dat2 = pd.DataFrame({'2017': [1,1,0,0,0,1,0,0,0,1,1,1,1,1,0,0,0,0,1,0,0,1,0,1,1]})
+
+dat2 = dat2.apply(pd.to_numeric, errors='ignore')
+wfl_attend = wfl_attend.reset_index()
+wfl_attend = wfl_attend.join(dat2)
+wfl_attend = wfl_attend.set_index('Team')/1.0
+wfl_attend[:5]
+
+#Set the number of graphs
+graphs1 = 25
+
+#adjust dataset to meet number of graphs
+wfl_attend_transpose = wfl_attend.transpose().ix[:,0:graphs1]
+
+#create a list of positions for the chart
+position = []
+for i in range(5):
+    for j in range(5):
+        b = i,j
+        position.append(b)
+
+name_list= list(wfl_attend_transpose)
+        
+#create base of subplot chart.. rows x columbs = graphs
+fig, axes = plt.subplots(nrows=5, ncols=5, sharey=True, sharex=True, figsize=(6,6))
+plt.ylim((0,1))
+fig.subplots_adjust(hspace=.5)
+
+#fill in base with graphs based off of position
+for i in range(graphs1):
+            wfl_attend_transpose.ix[:,i].plot(ax=axes[position[i]], kind='area');
+            axes[position[i]].set_title(name_list[i], size = 10);
+            axes[position[i]].tick_params(labelsize=6)
+            
+            
+
+
+
 
 
 
